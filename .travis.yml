@@ -1,2 +1,8 @@
 language: java
-script: mvn clean
+jdk:
+   - openjdk8
+sudo: false
+script: mvn clean install
+cache:
+  directories:
+  - $HOME/.m2
