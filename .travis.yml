@@ -6,10 +6,9 @@ cache:
   directories:
   - $HOME/.m2
 
-sudo: required
 services:
   - docker
-
+sudo: required
 deploy:
   provider: script
   script: bash deploy.sh
