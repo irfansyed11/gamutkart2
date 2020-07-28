@@ -13,3 +13,5 @@ script:
   - docker build -t front .
 after_success:
   - docker --version
+  - pip install --user awscli
+  - `aws ecr get-login --no-include-email --region ${REGION}`
