@@ -1,14 +1,25 @@
-#!/bin/bash
-##
-##
-ENVIRONMENT=$1
-if [ $ENVIRONMENT = "QA" ];then
-	sshpass -p "gamut" scp target/gamutkart.war gamut@172.17.0.3:/home/gamut/Distros/apache-tomcat-8.5.38/webapps
-	sshpass -p "gamut" ssh gamut@172.17.0.3 "JAVA_HOME=/home/gamut/Distros/jdk1.8.0_151" "/home/gamut/Distros/apache-tomcat-8.5.38/bin/startup.sh"
+# install AWS SDK
+pip install --user awscli
+export PATH=$PATH:$HOME/.local/bin
 
-elif  [ $ENVIRONMENT = "SIT" ];then
-	sshpass -p "gamut" scp target/gamutkart.war gamut@172.17.0.4:/home/gamut/Distros/apache-tomcat-8.5.38/webapps
-	sshpass -p "gamut" ssh gamut@172.17.0.4 "JAVA_HOME=/home/gamut/Distros/jdk1.8.0_151" "/home/gamut/Distros/apache-tomcat-8.5.38/bin/startup.sh"
-echo "deployment has been done!"
-fi
+# install necessary dependency for ecs-deploy
+add-apt-repository ppa:eugenesan/ppa
+apt-get update
+apt-get install jq -y
 
+# install ecs-deploy
+curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | \
+  sudo tee -a /usr/bin/ecs-deploy
+sudo chmod +x /usr/bin/ecs-deploy
+
+# login AWS ECR
+eval $(aws ecr get-login --region us-east-1)
+
+
+# build the docker image and push to an image repository
+docker build -t myapp .
+docker tag myapp $IMAGE_REPO_URL:latest
+docker push $IMAGE_REPO_URL:latest
+
+# update an AWS ECS service with the new image
+ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_REPO_URL:latest
