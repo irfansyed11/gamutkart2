@@ -13,5 +13,7 @@ script:
   - docker build -t front .
 after_success:
   - docker --version
-  - pip install --user awscli
-  - `aws ecr get-login --no-include-email --region ${REGION}`
+  - pip install --user awscli # install aws cli w/o sudo
+  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
+  - eval $(aws ecr get-login --no-include-email --region us-east-1)
+
