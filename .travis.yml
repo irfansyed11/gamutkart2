@@ -10,7 +10,15 @@ services:
   - docker
 sudo: required
 deploy:
-  provider: script
-  script: bash deploy.sh
+  script: 
+    - pip install --user awscli
+    - export PATH=$PATH:$HOME/.local/bin
+    - eval $(aws ecr get-login --no-include-email --region us-east-1)
+
+    - docker build -t myapp .
+    - docker tag myapp $IMAGE_REPO_URL:latest
+    - docker push $IMAGE_REPO_URL:latest
+
   on:
 branch: master
+
