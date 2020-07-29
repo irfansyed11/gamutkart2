@@ -3,7 +3,7 @@ pip install --user awscli
 export PATH=$PATH:$HOME/.local/bin
 
 # install necessary dependency for ecs-deploy
-sudo add-apt-repository ppa:eugenesan/ppa
+sudo add-apt-repository ppa:eugenesan/ppa -y
 sudo apt-get update
 sudo apt-get install jq -y
 
