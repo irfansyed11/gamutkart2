@@ -3,7 +3,6 @@ pip install --user awscli
 export PATH=$PATH:$HOME/.local/bin
 
 
-# conforming installation
 jq --version
 aws --version
 
