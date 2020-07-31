@@ -12,7 +12,7 @@ services:
 script:
   - docker build -t myapp .
 after_success:
-  - pip install --user awscli # install aws cli w/o sudo
+  - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
   - sudo add-apt-repository ppa:eugenesan/ppa -y
   - sudo apt-get update
