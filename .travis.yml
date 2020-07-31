@@ -6,11 +6,15 @@ cache:
   directories:
   - $HOME/.m2
 
+sudo: required
 services:
   - docker
-sudo: required
-deploy:
-  provider: script
-  script: bash deploy.sh
-  on:
-branch: master
+script:
+  - docker build -t myapp .
+after_success:
+  - pip install --user awscli # install aws cli w/o sudo
+  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
+  - eval $(aws ecr get-login --no-include-email --region us-east-1)
+  - docker tag myapp $IMAGE_REPO_URL:latest
+  - docker push $IMAGE_REPO_URL:latest 
+
