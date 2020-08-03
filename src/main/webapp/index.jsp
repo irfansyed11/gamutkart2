@@ -27,7 +27,7 @@
 	<div class="container">
 
 		<header>
-			<h1>Idexcel e-commerce Portal</h1> 
+			<h1>Idexcel e-com Portal</h1> 
 		</header>
 
 		<div id="tabs">
