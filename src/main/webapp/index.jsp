@@ -27,7 +27,8 @@
 	<div class="container">
 
 		<header>
-			<h1>Irfan e-com Portal</h1> 
+			<h1>Irfan-A world of wonders</h1> 
+			
 		</header>
 
 		<div id="tabs">
