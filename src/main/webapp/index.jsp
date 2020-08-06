@@ -27,7 +27,7 @@
 	<div class="container">
 
 		<header>
-			<h1>Irfan-A world of wonders</h1> 
+			<h1>Idexcel E-Commerce portal</h1> 
 			
 		</header>
 
