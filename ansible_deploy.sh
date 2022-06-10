@@ -19,3 +19,4 @@ else
   echo  " ${ansible_inventory} env name is not passed "
 fi
 
+echo "hi"
