@@ -27,7 +27,7 @@
 	<div class="container">
 
 		<header>
-			<h1>Idexcel E-Com portal</h1> 
+			<h1>Irfan E-Com portal</h1>
 			
 		</header>
 
