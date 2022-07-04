@@ -1,0 +1,18 @@
+node {
+    notify('Started')
+        stage('Deploy to Tomcat') {
+        sh 'wget --user=admin --password=admin123 http://10.0.0.4:8081/repository/irfan-release/com/gamutgurus/gamutkart/2.0.0/gamutkart-2.0.0.war'
+        sh 'mv gamutkart-2.0.0.war /home/labuser/apache-tomcat-8.5.38/webapps/gamutkart.war'
+        }
+    }
+    
+    notify('Done')
+    
+    def notify(status){
+	emailext(
+		to: "irfan26syed@gmail.com",
+		subject: "${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+		body: """<p>${status}: Job '${env.JOB_NAME}[${env.BUILD_NUMBER}]':</p>
+                <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>"""
+        )
+    }
