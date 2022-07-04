@@ -1,0 +1,40 @@
+
+node {
+    notify('Started')
+        stage('checkout source') {
+         git 'https://github.com/irfansyed11/gamutkart2.git'
+         }
+    try {
+        stage('build stage') {
+        sh 'mvn clean package'
+        junit '**/target/surefire-reports/TEST-*.xml'
+        }
+    }
+    catch (builderror) {
+            notify("Build failed ${builderror}")
+            currentBuild.result = 'FAILURE'
+        }
+    try {
+        stage ('SonarQube analysis') {
+        withSonarQubeEnv('SonarqubeServer') {
+        sh 'mvn sonar:sonar'
+        }
+        }
+    }
+catch (sonarerror) {
+            notify("SonarQube analysis failed ${sonarerror}")
+            currentBuild.result = 'FAILURE'
+        }
+        stage ('Upload war to Nexus') {
+        nexusArtifactUploader artifacts: [[artifactId: 'gamutkart', classifier: '', file: 'target/gamutkart.war', type: 'war']], credentialsId: 'nexus_cred', groupId: 'com.gamutgurus', nexusUrl: '10.0.0.4:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'irfan-release', version: '2.0.0'
+        }
+}
+    def notify(status){
+	emailext(
+		to: "irfan26syed@gmail.com",
+		subject: "${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+		body: """<p>${status}: Job '${env.JOB_NAME}[${env.BUILD_NUMBER}]':</p>
+                <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>"""
+        )
+    }
+
